@@ -3,7 +3,7 @@
 #include "./managers/windowManager.hpp"
 #include <spdlog/spdlog.h>
 
-using namespace Utils;
+using namespace sprocket::utils;
 
 Button::Button(const sf::Texture &texture, sf::Vector2f &position,
                sf::Vector2i spritePos, sf::Vector2i spriteSize,

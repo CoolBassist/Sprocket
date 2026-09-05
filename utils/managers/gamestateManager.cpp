@@ -2,7 +2,7 @@
 #include "windowManager.hpp"
 #include <SFML/Graphics.hpp>
 
-using namespace Utils;
+using namespace sprocket::utils;
 
 GameState *GameStateManager::currentState = nullptr;
 std::unordered_map<State, GameState *> GameStateManager::states;

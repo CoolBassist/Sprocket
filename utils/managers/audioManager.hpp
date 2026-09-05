@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace Utils {
+namespace sprocket::utils {
 
 enum class Sound { ButtonClick };
 enum class Music { Background };
@@ -39,4 +39,4 @@ private:
   static std::unordered_map<Sound, sf::Sound *> sounds;
   static std::unordered_map<Music, sf::Music> musicBuffers;
 };
-} // namespace Utils
+} // namespace sprocket::utils

@@ -1,6 +1,6 @@
 #include "windowManager.hpp"
 
-using namespace Utils;
+using namespace sprocket::utils;
 
 sf::RenderWindow WindowManager::window;
 bool WindowManager::initialized = false;

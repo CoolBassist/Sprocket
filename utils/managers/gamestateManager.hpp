@@ -1,7 +1,7 @@
 #include "../../gamestates/gamestate.hpp"
 #include <unordered_map>
 
-namespace Utils {
+namespace sprocket::utils {
 
 enum class State { MainMenu, Playing };
 enum class Transition { None, FadeIn, FadeOut };
@@ -25,4 +25,4 @@ private:
   static sf::Clock clock;
   static float lastDt;
 };
-} // namespace Utils
+} // namespace sprocket::utils

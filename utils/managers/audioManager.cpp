@@ -1,6 +1,6 @@
 #include "audioManager.hpp"
 
-using namespace Utils;
+using namespace sprocket::utils;
 
 std::unordered_map<Sound, sf::SoundBuffer *> AudioManager::soundBuffers;
 std::unordered_map<Sound, sf::Sound *> AudioManager::sounds;

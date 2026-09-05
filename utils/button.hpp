@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <functional>
 
-namespace Utils {
+namespace sprocket::utils {
 class Button {
 public:
   Button(const sf::Texture &texture, sf::Vector2f &position,
@@ -22,4 +22,4 @@ private:
   bool changeWhenHovering = false;
   bool isHovering = false;
 };
-} // namespace Utils
+} // namespace sprocket::utils

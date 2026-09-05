@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-namespace Utils {
+namespace sprocket::utils {
 class GameState {
 public:
   virtual ~GameState() = default;
@@ -11,4 +11,4 @@ public:
   virtual void onExit() = 0;
   virtual void handleEvent(const sf::Event &event) = 0;
 };
-} // namespace Utils
+} // namespace sprocket::utils
