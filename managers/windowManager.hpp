@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <spdlog/spdlog.h>
 
-namespace Utils {
+namespace sprocket::managers {
 class WindowManager {
 public:
   static void initialize(const sf::Vector2u &size, const std::string &title,
@@ -25,4 +25,4 @@ private:
   static bool initialized;
   static sf::RenderWindow window;
 };
-} // namespace Utils
+} // namespace sprocket::managers

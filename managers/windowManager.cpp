@@ -1,14 +1,13 @@
 #include "windowManager.hpp"
 
-using namespace Utils;
+using namespace sprocket::managers;
 
 sf::RenderWindow WindowManager::window;
 bool WindowManager::initialized = false;
 
-void Utils::WindowManager::initialize(const sf::Vector2u &size,
-                                      const std::string &title,
-                                      unsigned int style,
-                                      const int framerateLimit) {
+void WindowManager::initialize(const sf::Vector2u &size,
+                               const std::string &title, unsigned int style,
+                               const int framerateLimit) {
 
   spdlog::info("Initializing window...");
   spdlog::info("Size: {}x{}", size.x, size.y);
