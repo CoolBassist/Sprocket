@@ -30,8 +30,7 @@ void GameStateManager::handleEvent(const sf::Event &event) {
   }
 }
 
-void GameStateManager::switchState(game::State newState,
-                                   Transition transition = Transition::None) {
+void GameStateManager::switchState(game::State newState) {
   if (currentState) {
     currentState->onExit();
   }

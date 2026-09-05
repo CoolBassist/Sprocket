@@ -4,14 +4,12 @@
 
 namespace sprocket::managers {
 
-enum class Transition { None, FadeIn, FadeOut };
-
 class GameStateManager {
 public:
   static void update();
   static void render();
   static void handleEvent(const sf::Event &event);
-  static void switchState(game::State newState, Transition transition);
+  static void switchState(game::State newState);
   static void addState(game::State stateEnum,
                        sprocket::utils::GameState *state) {
     states[stateEnum] = state;
