@@ -2,10 +2,11 @@
 #include "windowManager.hpp"
 #include <SFML/Graphics.hpp>
 
+using namespace sprocket::managers;
 using namespace sprocket::utils;
 
 GameState *GameStateManager::currentState = nullptr;
-std::unordered_map<State, GameState *> GameStateManager::states;
+std::unordered_map<game::State, GameState *> GameStateManager::states;
 sf::Clock GameStateManager::clock;
 float GameStateManager::lastDt = 0.0f;
 
@@ -19,7 +20,7 @@ void GameStateManager::update() {
 
 void GameStateManager::render() {
   if (currentState) {
-    currentState->render(Utils::WindowManager::getWindow());
+    currentState->render(WindowManager::getWindow());
   }
 }
 
@@ -29,7 +30,7 @@ void GameStateManager::handleEvent(const sf::Event &event) {
   }
 }
 
-void GameStateManager::switchState(State newState,
+void GameStateManager::switchState(game::State newState,
                                    Transition transition = Transition::None) {
   if (currentState) {
     currentState->onExit();
