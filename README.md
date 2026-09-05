@@ -13,7 +13,8 @@ The template should show and explain Sprocket in action.
 2. 
    ```bash
    cd <project-title>/src
-   git submodule add https://github.com/CoolBassist/Sprocket.git```
+   git submodule add https://github.com/CoolBassist/Sprocket.git
+   ```
 
 3. Copy and paste the following into the CMakeLists.txt
    ```cmake
