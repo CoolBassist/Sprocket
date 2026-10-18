@@ -7,104 +7,65 @@
 #include <string_view>
 
 namespace sprocket::managers {
-static const std::string base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                        "abcdefghijklmnopqrstuvwxyz"
-                                        "0123456789+/";
+
+constexpr std::string_view alphabet =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 std::string encodeBase64(std::string_view input) {
-  std::string ret;
-  int i = 0;
-  int j = 0;
-  uint8_t char_array_3[3];
-  uint8_t char_array_4[4];
-
-  int bufLen = buf.length();
-  while (bufLen--) {
-    char_array_3[i++] = buf[buf.length() - bufLen - 1];
-    if (i == 3) {
-      char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
-      char_array_4[1] =
-          ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
-      char_array_4[2] =
-          ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
-      char_array_4[3] = char_array_3[2] & 0x3f;
-
-      for (i = 0; (i < 4); i++)
-        ret += base64_chars[char_array_4[i]];
-      i = 0;
-    }
+  std::string output;
+  for (std::size_t i = 0; i < input.size(); i += 3) {
+    const auto a = static_cast<unsigned char>(input[i]);
+    const auto b =
+        i + 1 < input.size() ? static_cast<unsigned char>(input[i + 1]) : 0;
+    const auto c =
+        i + 2 < input.size() ? static_cast<unsigned char>(input[i + 2]) : 0;
+    output += alphabet[a >> 2];
+    output += alphabet[((a & 3) << 4) | (b >> 4)];
+    output += i + 1 < input.size() ? alphabet[((b & 15) << 2) | (c >> 6)] : '=';
+    output += i + 2 < input.size() ? alphabet[c & 63] : '=';
   }
-
-  if (i) {
-    for (j = i; j < 3; j++)
-      char_array_3[j] = '\0';
-
-    char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
-    char_array_4[1] =
-        ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
-    char_array_4[2] =
-        ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
-    char_array_4[3] = char_array_3[2] & 0x3f;
-
-    for (j = 0; (j < i + 1); j++)
-      ret += base64_chars[char_array_4[j]];
-
-    while ((i++ < 3))
-      ret += '=';
-  }
-
-  return ret;
+  return output;
 }
 
 std::string decodeBase64(std::string_view input) {
-  int in_len = encoded_string.size();
-  int i = 0;
-  int j = 0;
-  int in_ = 0;
-  uint8_t char_array_4[4], char_array_3[3];
-  std::vector<uint8_t> ret;
-
-  while (in_len-- && (encoded_string[in_] != '=') &&
-         is_base64(encoded_string[in_])) {
-    char_array_4[i++] = encoded_string[in_];
-    in_++;
-    if (i == 4) {
-      for (i = 0; i < 4; i++)
-        char_array_4[i] = base64_chars.find(char_array_4[i]);
-
-      char_array_3[0] =
-          (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
-      char_array_3[1] =
-          ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
-      char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
-
-      for (i = 0; (i < 3); i++)
-        ret.push_back(char_array_3[i]);
-      i = 0;
+  const auto invalid = [] {
+    throw std::invalid_argument("Invalid Base64 save data");
+  };
+  if (input.size() % 4 != 0) {
+    invalid();
+  }
+  std::string output;
+  for (std::size_t i = 0; i < input.size(); i += 4) {
+    unsigned int values[4] = {};
+    for (std::size_t j = 0; j < 4; ++j) {
+      if (input[i + j] == '=' && j >= 2) {
+        continue;
+      }
+      const auto value = alphabet.find(input[i + j]);
+      if (value == std::string_view::npos) {
+        invalid();
+      }
+      values[j] = static_cast<unsigned int>(value);
+    }
+    const bool pad2 = input[i + 2] == '=';
+    const bool pad3 = input[i + 3] == '=';
+    if ((pad2 && !pad3) || ((pad2 || pad3) && i + 4 != input.size()) ||
+        (pad2 && (values[1] & 15)) || (pad3 && !pad2 && (values[2] & 3))) {
+      invalid();
+    }
+    output += static_cast<char>((values[0] << 2) | (values[1] >> 4));
+    if (!pad2) {
+      output += static_cast<char>((values[1] << 4) | (values[2] >> 2));
+    }
+    if (!pad3) {
+      output += static_cast<char>((values[2] << 6) | values[3]);
     }
   }
-
-  if (i) {
-    for (j = i; j < 4; j++)
-      char_array_4[j] = 0;
-
-    for (j = 0; j < 4; j++)
-      char_array_4[j] = base64_chars.find(char_array_4[j]);
-
-    char_array_3[0] = (char_array_4[0] << 2) + ((char_array_4[1] & 0x30) >> 4);
-    char_array_3[1] =
-        ((char_array_4[1] & 0xf) << 4) + ((char_array_4[2] & 0x3c) >> 2);
-    char_array_3[2] = ((char_array_4[2] & 0x3) << 6) + char_array_4[3];
-
-    for (j = 0; (j < i - 1); j++)
-      ret.push_back(char_array_3[j]);
-  }
-
-  return std::string(ret.begin(), ret.end());
+  return output;
 }
 
-void SaveManager::save(const std::filesystem::path &path,
-                       const sprocket::utils::SaveData &data) {
+void detail::writeSaveFile(const std::filesystem::path &path,
+                           const sprocket::utils::SaveData &data) {
   const auto encoded = encodeBase64(data.toJson().dump());
   std::ofstream file(path, std::ios::binary | std::ios::trunc);
   if (!file) {
@@ -117,10 +78,13 @@ void SaveManager::save(const std::filesystem::path &path,
   }
 }
 
-void SaveManager::load(const std::filesystem::path &path,
-                       sprocket::utils::SaveData &data) {
+void detail::readSaveFile(const std::filesystem::path &path,
+                          sprocket::utils::SaveData &data) {
   std::ifstream file(path, std::ios::binary);
   if (!file) {
+    if (!std::filesystem::exists(path)) {
+      return;
+    }
     throw std::runtime_error("Unable to open save file for reading");
   }
   const std::string encoded{std::istreambuf_iterator<char>(file),
