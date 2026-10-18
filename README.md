@@ -38,13 +38,23 @@ The template should show and explain Sprocket in action.
            FetchContent_MakeAvailable(spdlog)
        endif()
    
+       if(NOT TARGET nlohmann_json::nlohmann_json)
+           include(FetchContent)
+           FetchContent_Declare(nlohmann_json
+               GIT_REPOSITORY https://github.com/nlohmann/json.git
+               GIT_TAG v3.12.0
+               GIT_SHALLOW ON)
+           FetchContent_MakeAvailable(nlohmann_json)
+       endif()
+
        add_library(sprocket STATIC ${SPROCKET_SOURCES})
        add_library(Sprocket::Sprocket ALIAS sprocket)
        target_include_directories(sprocket PUBLIC "${SPROCKET_SOURCE_DIR}")
        target_compile_features(sprocket PUBLIC cxx_std_17)
-       target_link_libraries(sprocket PUBLIC SFML::Graphics SFML::Audio spdlog::spdlog)
+       target_link_libraries(sprocket PUBLIC SFML::Graphics SFML::Audio spdlog::spdlog nlohmann_json::nlohmann_json)
    endif()
    target_link_libraries(main PRIVATE Sprocket::Sprocket)
+   ```
 
 4. Create `src/utils/gameState.hpp`. This is going to store the different states for your game, such as gamestate, music and sound effects. Look at the template for an example of how to structure this.
 5. All done!
