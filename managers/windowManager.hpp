@@ -8,6 +8,10 @@ public:
   static void initialize(const sf::Vector2u &size, const std::string &title,
                          unsigned int style = sf::Style::Default,
                          const int framerateLimit = 60);
+  static void initialize(const sf::Vector2u &size, const std::string &title,
+                         sf::Image favicon,
+                         unsigned int style = sf::Style::Default,
+                         const int framerateLimit = 60);
   static void shutdown() {
     spdlog::info("Shutting down window...");
     window.close();
