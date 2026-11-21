@@ -6,6 +6,12 @@ namespace sprocket::managers {
 class WindowManager {
 public:
   static void initialize(const sf::Vector2u &size, const std::string &title,
+                         sf::State state = sf::State::Windowed,
+                         unsigned int style = sf::Style::Default,
+                         const int framerateLimit = 60);
+  static void initialize(const sf::Vector2u &size, const std::string &title,
+                         sf::Image favicon,
+                         sf::State state = sf::State::Windowed,
                          unsigned int style = sf::Style::Default,
                          const int framerateLimit = 60);
   static void shutdown() {

@@ -30,14 +30,27 @@ void GameStateManager::handleEvent(const sf::Event &event) {
   }
 }
 
-void GameStateManager::switchState(game::State newState) {
+GameState *GameStateManager::findState(game::State state) {
+  const auto found = states.find(state);
+  if (found == states.end() || !found->second) {
+    throw std::invalid_argument("Game state is not registered");
+  }
+  return found->second;
+}
+
+void GameStateManager::transitionTo(GameState *next) {
   if (currentState) {
     currentState->onExit();
   }
 
-  currentState = states[newState];
+  currentState = next;
+}
 
-  if (currentState) {
-    currentState->onEnter();
+void GameStateManager::switchState(game::State newState) {
+  auto *next = findState(newState);
+  if (next->requiresEntryData()) {
+    throw std::invalid_argument("Game state requires entry data");
   }
+  transitionTo(next);
+  next->onEnter();
 }

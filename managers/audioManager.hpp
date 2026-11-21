@@ -1,5 +1,5 @@
 #pragma once
-#include "../../utils/gameState.hpp"
+#include "../../utils/gameMedia.hpp"
 #include <SFML/Audio.hpp>
 #include <spdlog/spdlog.h>
 #include <string>
